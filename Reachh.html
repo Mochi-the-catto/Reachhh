@@ -1,0 +1,1469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Just the Songs | Reachh's Music World</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-pink: #ff69b4;
+            --light-pink: #ffb6c1;
+            --dark-pink: #db7093;
+            --background-light: #fff5f7;
+            --text-light: #333;
+            --card-light: #ffffff;
+            --background-dark: #121212;
+            --text-dark: #f5f5f5;
+            --card-dark: #1e1e1e;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--background-light);
+            color: var(--text-light);
+            transition: var(--transition);
+            overflow-x: hidden;
+        }
+
+        body.dark-mode {
+            background-color: var(--background-dark);
+            color: var(--text-dark);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: var(--primary-pink);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .dark-mode header {
+            background-color: #000;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            padding: 5px 10px;
+            border-radius: 20px;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(30deg);
+        }
+
+        /* Main Content Styles */
+        main {
+            min-height: calc(100vh - 140px);
+            padding: 40px 0;
+        }
+
+        .page {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Home Page */
+        .hero {
+            text-align: center;
+            padding: 60px 0;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            color: var(--primary-pink);
+        }
+
+        .dark-mode .hero h1 {
+            color: var(--light-pink);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* About Page */
+        .about-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .profile-img {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid var(--primary-pink);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .dark-mode .profile-img {
+            border-color: var(--light-pink);
+        }
+
+        .about-content h2 {
+            font-size: 2.5rem;
+            color: var(--primary-pink);
+        }
+
+        .dark-mode .about-content h2 {
+            color: var(--light-pink);
+        }
+
+        .about-content p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+        }
+
+        /* Playlist Page */
+        .playlists {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .playlist-card {
+            background-color: var(--card-light);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .dark-mode .playlist-card {
+            background-color: var(--card-dark);
+        }
+
+        .playlist-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .playlist-header {
+            background-color: var(--primary-pink);
+            padding: 20px;
+            text-align: center;
+        }
+
+        .dark-mode .playlist-header {
+            background-color: #000;
+        }
+
+        .playlist-header h3 {
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .playlist-songs {
+            padding: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .song-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .dark-mode .song-item {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .song-info {
+            flex: 1;
+        }
+
+        .song-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .song-artist {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .dark-mode .song-artist {
+            color: #aaa;
+        }
+
+        .song-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            color: var(--primary-pink);
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: var(--transition);
+            padding: 5px;
+        }
+
+        .dark-mode .action-btn {
+            color: var(--light-pink);
+        }
+
+        .action-btn:hover {
+            transform: scale(1.2);
+        }
+
+        .action-btn.favorite.active {
+            color: #ff4757;
+        }
+
+        /* Song Player */
+        .song-player {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--card-light);
+            padding: 15px 20px;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            display: none;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .dark-mode .song-player {
+            background-color: var(--card-dark);
+        }
+
+        .song-player.active {
+            display: flex;
+        }
+
+        .player-info {
+            flex: 1;
+        }
+
+        .player-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .control-btn {
+            background: none;
+            border: none;
+            color: var(--primary-pink);
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: var(--transition);
+            padding: 5px;
+        }
+
+        .dark-mode .control-btn {
+            color: var(--light-pink);
+        }
+
+        .control-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .progress-container {
+            flex: 2;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 5px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .dark-mode .progress-bar {
+            background-color: #333;
+        }
+
+        .progress {
+            height: 100%;
+            background-color: var(--primary-pink);
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+
+        .dark-mode .progress {
+            background-color: var(--light-pink);
+        }
+
+        .time {
+            font-size: 0.8rem;
+            color: #666;
+            min-width: 40px;
+        }
+
+        .dark-mode .time {
+            color: #aaa;
+        }
+
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .volume-slider {
+            width: 80px;
+        }
+
+        /* Favorites Page */
+        .favorites-list {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .favorite-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background-color: var(--card-light);
+            margin-bottom: 15px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .dark-mode .favorite-item {
+            background-color: var(--card-dark);
+        }
+
+        /* Contact Page */
+        .contact-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .contact-card {
+            background-color: var(--card-light);
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: var(--transition);
+        }
+
+        .dark-mode .contact-card {
+            background-color: var(--card-dark);
+        }
+
+        .contact-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .contact-icon {
+            font-size: 2.5rem;
+            color: var(--primary-pink);
+            margin-bottom: 15px;
+        }
+
+        .dark-mode .contact-icon {
+            color: var(--light-pink);
+        }
+
+        .contact-card h3 {
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+
+        .contact-card a {
+            color: var(--primary-pink);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .dark-mode .contact-card a {
+            color: var(--light-pink);
+        }
+
+        .contact-card a:hover {
+            text-decoration: underline;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--primary-pink);
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 40px;
+        }
+
+        .dark-mode footer {
+            background-color: #000;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .nav-links {
+                gap: 15px;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .playlists {
+                grid-template-columns: 1fr;
+            }
+
+            .song-player {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .player-controls {
+                order: -1;
+            }
+
+            .progress-container {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-links {
+                flex-direction: column;
+                gap: 10px;
+                position: absolute;
+                top: 70px;
+                left: 0;
+                right: 0;
+                background-color: var(--primary-pink);
+                padding: 20px;
+                display: none;
+            }
+
+            .dark-mode .nav-links {
+                background-color: #000;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .profile-img {
+                width: 150px;
+                height: 150px;
+            }
+
+            .volume-control {
+                display: none;
+            }
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .audio-notice {
+            background-color: #ffebee;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-size: 0.9rem;
+            color: #d32f2f;
+            text-align: center;
+        }
+
+        .dark-mode .audio-notice {
+            background-color: #311;
+            color: #ff6b6b;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <a href="#" class="logo">Just the Songs</a>
+                <button class="menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="nav-links">
+                    <a href="#" class="nav-link active" data-page="home">Home</a>
+                    <a href="#" class="nav-link" data-page="playlists">Playlists</a>
+                    <a href="#" class="nav-link" data-page="favorites">Favorites</a>
+                    <a href="#" class="nav-link" data-page="about">About</a>
+                    <a href="#" class="nav-link" data-page="contact">Contact</a>
+                    <button class="theme-toggle">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Home Page -->
+        <section id="home" class="page active">
+            <div class="hero">
+                <h1>Just the songs</h1>
+                <p>Welcome to my music world, enjoy exploring my vibe :)</p>
+            </div>
+        </section>
+
+        <!-- Playlists Page -->
+        <section id="playlists" class="page">
+            <h2>My Playlists</h2>
+            <div class="audio-notice">
+                <i class="fas fa-info-circle"></i> Note: For demonstration, we're using sample audio tracks. In a real implementation, you would use actual music files or streaming service APIs.
+            </div>
+            <div class="playlists">
+                <!-- Playlist cards will be generated by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Favorites Page -->
+        <section id="favorites" class="page">
+            <h2>Your Favorite Songs</h2>
+            <div class="favorites-list">
+                <!-- Favorite songs will be populated by JavaScript -->
+            </div>
+        </section>
+
+        <!-- About Page -->
+        <section id="about" class="page">
+            <div class="about-content">
+                <img src="https://i.pinimg.com/736x/6e/50/ae/6e50aecbc36cd1f8432204e1bb9381ee.jpg" alt="Reachh" class="profile-img">
+                <h2>Reachh</h2>
+                <p>What wind carried you here to discover my music?</p>
+            </div>
+        </section>
+
+        <!-- Contact Page -->
+        <section id="contact" class="page">
+            <h2>Contact Me</h2>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <div class="contact-card">
+                        <i class="fas fa-phone contact-icon"></i>
+                        <h3>Phone</h3>
+                        <a href="tel:+85566724875">+855 66 724 875</a>
+                    </div>
+                    <div class="contact-card">
+                        <i class="fab fa-facebook contact-icon"></i>
+                        <h3>Facebook</h3>
+                        <a href="https://web.facebook.com/reachh.829354" target="_blank">reachh.829354</a>
+                    </div>
+                    <div class="contact-card">
+                        <i class="fas fa-envelope contact-icon"></i>
+                        <h3>Email</h3>
+                        <a href="mailto:hiek.sovannareach@gmail.com">hiek.sovannareach@gmail.com</a>
+                    </div>
+                    <div class="contact-card">
+                        <i class="fab fa-spotify contact-icon"></i>
+                        <h3>Spotify</h3>
+                        <a href="https://open.spotify.com/user/31xhzlmkfl3wjd3yylxgft4wphri?si=119681c51b0c41f4" target="_blank">My Spotify Profile</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Song Player -->
+    <div class="song-player">
+        <div class="player-info">
+            <div class="song-title">Now Playing</div>
+            <div class="song-artist">Artist</div>
+        </div>
+        <div class="player-controls">
+            <button class="control-btn prev-btn"><i class="fas fa-step-backward"></i></button>
+            <button class="control-btn play-btn"><i class="fas fa-play"></i></button>
+            <button class="control-btn next-btn"><i class="fas fa-step-forward"></i></button>
+        </div>
+        <div class="progress-container">
+            <span class="time current-time">0:00</span>
+            <div class="progress-bar">
+                <div class="progress"></div>
+            </div>
+            <span class="time duration">0:00</span>
+        </div>
+        <div class="volume-control">
+            <button class="control-btn volume-btn"><i class="fas fa-volume-up"></i></button>
+            <input type="range" class="volume-slider" min="0" max="100" value="80">
+        </div>
+        <button class="control-btn favorite-btn"><i class="far fa-heart"></i></button>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 Just the Songs | Created by Reachh</p>
+        </div>
+    </footer>
+
+    <!-- Audio Element -->
+    <audio id="audio-player"></audio>
+
+    <script>
+        // Playlist data with actual working audio URLs
+        const playlists = [
+            {
+                id: 1,
+                name: "Heartfelt songs",
+                songs: [
+                    { 
+                        id: 1, 
+                        title: "Never Gonna Give You Up", 
+                        artist: "Rick Astley",
+                        audioUrl: "Music/Rick Astley - Never Gonna Give You Up (Official Video) (4K Remaster).mp3",
+                        duration: "3:32"
+                    },
+                    { 
+                        id: 2, 
+                        title: "Lovely", 
+                        artist: "Boywithuke",
+                        audioUrl: "Music/BoyWithUke - Lovely  Lyrics By Nikki.mp3",
+                        duration: "2:48"
+                    },
+                    { 
+                        id: 3, 
+                        title: "From The Start", 
+                        artist: "Laufey",
+                        audioUrl: "Music/Laufey - From The Start (Official Music Video).mp3",
+                        duration: "3:15"
+                    },
+                    { 
+                        id: 4, 
+                        title: "UWU", 
+                        artist: "chevy",
+                        audioUrl: "Music/chevy - uwu (official audio w lyrics).mp3",
+                        duration: "2:55"
+                    },
+                    { 
+                        id: 5, 
+                        title: "La Vie En Rose", 
+                        artist: "Emily Watts",
+                        audioUrl: "Music/Emily Watts - La Vie En Rose [Official Music Video].mp3",
+                        duration: "3:45"
+                    },
+                    { 
+                        id: 6, 
+                        title: "Hidden in the Sand", 
+                        artist: "Tally Hall",
+                        audioUrl: "Music/Tally Hall - Hidden in the Sand  Lyrics.mp3",
+                        duration: "2:30"
+                    },
+                    { 
+                        id: 7, 
+                        title: "Just the Two of Us", 
+                        artist: "Bill Withers",
+                        audioUrl: "Music/Bill Withers  - Just The Two Of Us (Lyrics).mp3",
+                        duration: "3:58"
+                    },
+                    { 
+                        id: 8, 
+                        title: "Mathilda", 
+                        artist: "Harry Styles",
+                        audioUrl: "Music/Harry Styles - Matilda (Lyrics).mp3",
+                        duration: "3:05"
+                    },
+                    { 
+                        id: 9, 
+                        title: "this is what slow dancing feels like", 
+                        artist: "JVKE",
+                        audioUrl: "Music/JVKE - this is what slow dancing feels like (official lyric video).mp3",
+                        duration: "3:20"
+                    },
+                    { 
+                        id: 10, 
+                        title: "Deeper Than It Seem", 
+                        artist: "Jace June",
+                        audioUrl: "Music/Jace June - Deeper Than It Seems (Official Lyric Video).mp3",
+                        duration: "3:12"
+                    }
+                ]
+            },
+            {
+                id: 2,
+                name: "Heartbreak anthems",
+                songs: [
+                    { 
+                        id: 11, 
+                        title: "Let You Break My Heart Again", 
+                        artist: "Laufey",
+                        audioUrl: "Music/Laufey & Philharmonia Orchestra - Let You Break My Heart Again (Lyrics).mp3",
+                        duration: "3:25"
+                    },
+                    { 
+                        id: 12, 
+                        title: "Ghost", 
+                        artist: "Boywithuke",
+                        audioUrl: "Music/BoyWithUke - Ghost (Official Music Video).mp3",
+                        duration: "2:50"
+                    },
+                    { 
+                        id: 13, 
+                        title: "Gaslight", 
+                        artist: "Boywithuke",
+                        audioUrl: "Music/BoyWithUke - Gaslight (Official Music Video).mp3",
+                        duration: "2:45"
+                    },
+                    { 
+                        id: 14, 
+                        title: "Understand", 
+                        artist: "Boywithuke",
+                        audioUrl: "Music/BoyWithUke - Understand (Lyrics).mp3",
+                        duration: "3:05"
+                    },
+                    { 
+                        id: 15, 
+                        title: "Falling Behind", 
+                        artist: "Laufey",
+                        audioUrl: "Music/@laufey - Falling Behind (Lyrics).mp3",
+                        duration: "3:15"
+                    },
+                    { 
+                        id: 16, 
+                        title: "Nightmare", 
+                        artist: "Boywithuke",
+                        audioUrl: "https://www.soundjay.com/button/sounds/beep-05.wav",
+                        duration: "2:55"
+                    },
+                    { 
+                        id: 17, 
+                        title: "Sleep Deprived", 
+                        artist: "Boywithuke",
+                        audioUrl: "Music/BoyWithUke - Sleep Deprived (Lyric Video).mp3",
+                        duration: "3:10"
+                    },
+                    { 
+                        id: 18, 
+                        title: "She Said No", 
+                        artist: "Boywithuke",
+                        audioUrl: "Music/BoyWithUke - She Said No (Lyrics).mp3",
+                        duration: "2:40"
+                    },
+                    { 
+                        id: 19, 
+                        title: "Careless whisper", 
+                        artist: "George Michael",
+                        audioUrl: "Music/George Michael - Careless Whisper (Lyrics).mp3",
+                        duration: "5:02"
+                    },
+                    { 
+                        id: 20, 
+                        title: "愛して愛して愛して", 
+                        artist: "Ado",
+                        audioUrl: "Music/Ado愛して愛して愛して.mp3",
+                        duration: "3:30"
+                    }
+                ]
+            },
+            {
+                id: 3,
+                name: "Laid-back vibe",
+                songs: [
+                    { 
+                        id: 21, 
+                        title: "Oblivion", 
+                        artist: "Lily Potter",
+                        audioUrl: "Music/lily potter - oblivion (lyrics).mp3",
+                        duration: "3:45"
+                    },
+                    { 
+                        id: 22, 
+                        title: "Matsuri", 
+                        artist: "Fuji Kaze",
+                        audioUrl: "Music/Fujii Kaze -  MatsuriOfficial Video.mp3",
+                        duration: "3:20"
+                    },
+                    { 
+                        id: 23, 
+                        title: "夜に駆ける", 
+                        artist: "YOASOBI",
+                        audioUrl: "Music/夜に駆ける.mp3",
+                        duration: "4:15"
+                    },
+                    { 
+                        id: 24, 
+                        title: "bad guy", 
+                        artist: "Billie Eilish",
+                        audioUrl: "Music/Billie Eilish - bad guy (Lyrics).mp3",
+                        duration: "3:14"
+                    },
+                    { 
+                        id: 25, 
+                        title: "rises the moon", 
+                        artist: "Laina Flores",
+                        audioUrl: "Music/liana flores - rises the moon (Lyrics).mp3",
+                        duration: "2:50"
+                    },
+                    { 
+                        id: 26, 
+                        title: "Small Fry", 
+                        artist: "Curio Watts",
+                        audioUrl: "Music/Small Fry - Curio Watts, BoyWithUke (Lyrics).mp3",
+                        duration: "3:05"
+                    },
+                    { 
+                        id: 27, 
+                        title: "Jump Up, Super Star!", 
+                        artist: "The Living Tombstone",
+                        audioUrl: "Music/Jump Up, Super Star! Remix- Super Mario Odyssey- The Living Tombstone.mp3",
+                        duration: "3:30"
+                    },
+                    { 
+                        id: 28, 
+                        title: "Passing Through", 
+                        artist: "Kaden MacKay",
+                        audioUrl: "Music/Passing Through (Can't the Future Just Wait).mp3",
+                        duration: "2:45"
+                    },
+                    { 
+                        id: 29, 
+                        title: "Shut up My Mom Calling", 
+                        artist: "Hotel Ugly",
+                        audioUrl: "Music/Hotel Ugly - Shut Up My Moms Calling (Lyrics).mp3",
+                        duration: "2:35"
+                    },
+                    { 
+                        id: 30, 
+                        title: "Santa Baby", 
+                        artist: "laufey",
+                        audioUrl: "Music/Laufey - Santa Baby (Lyrics).mp3",
+                        duration: "3:15"
+                    }
+                ]
+            },
+            {
+                id: 4,
+                name: "Mixed",
+                songs: [
+                    { 
+                        id: 31, 
+                        title: "Oh Ok", 
+                        artist: "xxl freestyle",
+                        audioUrl: "Music/Oh Ok (xxl freestyle).mp3",
+                        duration: "2:20"
+                    },
+                    { 
+                        id: 32, 
+                        title: "Limbo", 
+                        artist: "Freddie Dredd",
+                        audioUrl: "Music/Freddie Dredd - Limbo (Lyrics).mp3",
+                        duration: "2:45"
+                    },
+                    { 
+                        id: 33, 
+                        title: "GRAILED", 
+                        artist: "Freddie Dredd",
+                        audioUrl: "Music/1nonly - GRAILED (feat. Freddie Dredd) [Official Music Video].mp3",
+                        duration: "2:30"
+                    },
+                    { 
+                        id: 34, 
+                        title: "Abuse", 
+                        artist: "Freddie Dredd",
+                        audioUrl: "Music/Freddie Dredd - Abuse - Lyrics.mp3",
+                        duration: "2:50"
+                    },
+                    { 
+                        id: 35, 
+                        title: "af1", 
+                        artist: "lilbubbelgum",
+                        audioUrl: "Music/lilbubblegum - af1 [Lyrics].mp3",
+                        duration: "2:15"
+                    },
+                    { 
+                        id: 36, 
+                        title: "All I Need", 
+                        artist: "Lloyd",
+                        audioUrl: "Music/Lloyd - All I Need (Lyrics).mp3",
+                        duration: "3:45"
+                    },
+                    { 
+                        id: 37, 
+                        title: "Say it", 
+                        artist: "Tory Lanez",
+                        audioUrl: "Music/Say It - Tory Lanez (Lyrics).mp3",
+                        duration: "3:25"
+                    },
+                    { 
+                        id: 38, 
+                        title: "Trap Queen", 
+                        artist: "Fetty Wap",
+                        audioUrl: "Music/Fetty Wap - Trap Queen (Lyrics).mp3",
+                        duration: "3:42"
+                    },
+                    { 
+                        id: 39, 
+                        title: "You", 
+                        artist: "Lolyd",
+                        audioUrl: "Music/Lloyd - You (Lyrics)  ft. Lil Wayne.mp3",
+                        duration: "3:15"
+                    },
+                    { 
+                        id: 40, 
+                        title: "Drive By", 
+                        artist: "Eric Bellinger",
+                        audioUrl: "Music/Eric Bellinger- Drive by (lyrics).mp3",
+                        duration: "3:05"
+                    }
+                ]
+            }
+        ];
+
+        // State management
+        let currentPage = 'home';
+        let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+        let isDarkMode = localStorage.getItem('darkMode') === 'true';
+        let currentSong = null;
+        let isPlaying = false;
+        let currentPlaylistIndex = 0;
+        let currentSongIndex = 0;
+
+        // DOM Elements
+        const navLinks = document.querySelectorAll('.nav-link');
+        const pages = document.querySelectorAll('.page');
+        const themeToggle = document.querySelector('.theme-toggle');
+        const playlistsContainer = document.querySelector('.playlists');
+        const favoritesContainer = document.querySelector('.favorites-list');
+        const songPlayer = document.querySelector('.song-player');
+        const playerTitle = document.querySelector('.player-info .song-title');
+        const playerArtist = document.querySelector('.player-info .song-artist');
+        const playBtn = document.querySelector('.play-btn');
+        const prevBtn = document.querySelector('.prev-btn');
+        const nextBtn = document.querySelector('.next-btn');
+        const favoriteBtn = document.querySelector('.favorite-btn');
+        const progressBar = document.querySelector('.progress-bar');
+        const progress = document.querySelector('.progress');
+        const currentTimeEl = document.querySelector('.current-time');
+        const durationEl = document.querySelector('.duration');
+        const volumeSlider = document.querySelector('.volume-slider');
+        const volumeBtn = document.querySelector('.volume-btn');
+        const audioPlayer = document.getElementById('audio-player');
+        const menuToggle = document.querySelector('.menu-toggle');
+        const navLinksContainer = document.querySelector('.nav-links');
+
+        // Initialize the app
+        function init() {
+            // Set dark mode if enabled
+            if (isDarkMode) {
+                document.body.classList.add('dark-mode');
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            }
+            
+            // Render playlists
+            renderPlaylists();
+            
+            // Render favorites
+            renderFavorites();
+            
+            // Set up event listeners
+            setupEventListeners();
+            
+            // Set initial volume
+            audioPlayer.volume = volumeSlider.value / 100;
+        }
+
+        // Set up event listeners
+        function setupEventListeners() {
+            // Navigation
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const page = link.getAttribute('data-page');
+                    navigateTo(page);
+                    
+                    // Close mobile menu if open
+                    if (window.innerWidth <= 480) {
+                        navLinksContainer.classList.remove('active');
+                    }
+                });
+            });
+            
+            // Theme toggle
+            themeToggle.addEventListener('click', toggleTheme);
+            
+            // Player controls
+            playBtn.addEventListener('click', togglePlay);
+            prevBtn.addEventListener('click', playPrevious);
+            nextBtn.addEventListener('click', playNext);
+            favoriteBtn.addEventListener('click', toggleFavorite);
+            
+            // Progress bar
+            progressBar.addEventListener('click', setProgress);
+            
+            // Audio events
+            audioPlayer.addEventListener('loadedmetadata', updateDuration);
+            audioPlayer.addEventListener('timeupdate', updateProgress);
+            audioPlayer.addEventListener('ended', playNext);
+            
+            // Volume controls
+            volumeSlider.addEventListener('input', setVolume);
+            volumeBtn.addEventListener('click', toggleMute);
+            
+            // Mobile menu toggle
+            menuToggle.addEventListener('click', () => {
+                navLinksContainer.classList.toggle('active');
+            });
+        }
+
+        // Navigation function
+        function navigateTo(page) {
+            // Update active nav link
+            navLinks.forEach(link => {
+                if (link.getAttribute('data-page') === page) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+            
+            // Show the selected page
+            pages.forEach(p => {
+                if (p.id === page) {
+                    p.classList.add('active');
+                } else {
+                    p.classList.remove('active');
+                }
+            });
+            
+            currentPage = page;
+            
+            // Special handling for favorites page
+            if (page === 'favorites') {
+                renderFavorites();
+            }
+        }
+
+        // Toggle dark/light mode
+        function toggleTheme() {
+            isDarkMode = !isDarkMode;
+            document.body.classList.toggle('dark-mode');
+            
+            if (isDarkMode) {
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            } else {
+                themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+            }
+            
+            localStorage.setItem('darkMode', isDarkMode);
+        }
+
+        // Render playlists
+        function renderPlaylists() {
+            playlistsContainer.innerHTML = '';
+            
+            playlists.forEach((playlist, playlistIndex) => {
+                const playlistCard = document.createElement('div');
+                playlistCard.className = 'playlist-card';
+                
+                let songsHTML = '';
+                playlist.songs.forEach((song, songIndex) => {
+                    const isFav = favorites.some(fav => fav.id === song.id);
+                    songsHTML += `
+                        <div class="song-item" data-song-id="${song.id}">
+                            <div class="song-info">
+                                <div class="song-title">${song.title}</div>
+                                <div class="song-artist">${song.artist}</div>
+                            </div>
+                            <div class="song-actions">
+                                <button class="action-btn play-song" data-playlist-index="${playlistIndex}" data-song-index="${songIndex}">
+                                    <i class="fas fa-play"></i>
+                                </button>
+                                <button class="action-btn favorite ${isFav ? 'active' : ''}" data-song-id="${song.id}">
+                                    <i class="${isFav ? 'fas' : 'far'} fa-heart"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                playlistCard.innerHTML = `
+                    <div class="playlist-header">
+                        <h3>${playlist.name}</h3>
+                    </div>
+                    <div class="playlist-songs">
+                        ${songsHTML}
+                    </div>
+                `;
+                
+                playlistsContainer.appendChild(playlistCard);
+            });
+            
+            // Add event listeners to song actions
+            document.querySelectorAll('.play-song').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const playlistIndex = parseInt(e.currentTarget.getAttribute('data-playlist-index'));
+                    const songIndex = parseInt(e.currentTarget.getAttribute('data-song-index'));
+                    playSong(playlistIndex, songIndex);
+                });
+            });
+            
+            document.querySelectorAll('.action-btn.favorite').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const songId = parseInt(e.currentTarget.getAttribute('data-song-id'));
+                    toggleFavoriteSong(songId);
+                });
+            });
+        }
+
+        // Play a song
+        function playSong(playlistIndex, songIndex) {
+            const song = playlists[playlistIndex].songs[songIndex];
+            
+            if (song) {
+                currentSong = song;
+                currentPlaylistIndex = playlistIndex;
+                currentSongIndex = songIndex;
+                
+                playerTitle.textContent = song.title;
+                playerArtist.textContent = song.artist;
+                
+                // Update favorite button state
+                const isFav = favorites.some(fav => fav.id === song.id);
+                favoriteBtn.innerHTML = isFav ? '<i class="fas fa-heart"></i>' : '<i class="far fa-heart"></i>';
+                
+                // Set audio source
+                audioPlayer.src = song.audioUrl;
+                
+                // Show player
+                songPlayer.classList.add('active');
+                
+                // Play the song
+                audioPlayer.play().then(() => {
+                    isPlaying = true;
+                    playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                }).catch(error => {
+                    console.error("Error playing audio:", error);
+                    alert("Could not play audio. Please check your internet connection and try again.");
+                });
+            }
+        }
+
+        // Toggle play/pause
+        function togglePlay() {
+            if (!currentSong) return;
+            
+            if (isPlaying) {
+                audioPlayer.pause();
+                playBtn.innerHTML = '<i class="fas fa-play"></i>';
+            } else {
+                audioPlayer.play().then(() => {
+                    playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                }).catch(error => {
+                    console.error("Error playing audio:", error);
+                });
+            }
+            isPlaying = !isPlaying;
+        }
+
+        // Play previous song
+        function playPrevious() {
+            if (!currentSong) return;
+            
+            let newSongIndex = currentSongIndex - 1;
+            if (newSongIndex < 0) {
+                newSongIndex = playlists[currentPlaylistIndex].songs.length - 1;
+            }
+            
+            playSong(currentPlaylistIndex, newSongIndex);
+        }
+
+        // Play next song
+        function playNext() {
+            if (!currentSong) return;
+            
+            let newSongIndex = currentSongIndex + 1;
+            if (newSongIndex >= playlists[currentPlaylistIndex].songs.length) {
+                newSongIndex = 0;
+            }
+            
+            playSong(currentPlaylistIndex, newSongIndex);
+        }
+
+        // Update progress bar
+        function updateProgress() {
+            if (!currentSong) return;
+            
+            const { currentTime, duration } = audioPlayer;
+            const progressPercent = (currentTime / duration) * 100;
+            progress.style.width = `${progressPercent}%`;
+            
+            // Update time display
+            currentTimeEl.textContent = formatTime(currentTime);
+        }
+
+        // Update duration display
+        function updateDuration() {
+            if (!currentSong) return;
+            
+            durationEl.textContent = formatTime(audioPlayer.duration);
+        }
+
+        // Format time in minutes:seconds
+        function formatTime(seconds) {
+            if (isNaN(seconds)) return "0:00";
+            
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+
+        // Set progress on click
+        function setProgress(e) {
+            if (!currentSong) return;
+            
+            const width = this.clientWidth;
+            const clickX = e.offsetX;
+            const duration = audioPlayer.duration;
+            
+            audioPlayer.currentTime = (clickX / width) * duration;
+        }
+
+        // Set volume
+        function setVolume() {
+            audioPlayer.volume = this.value / 100;
+            
+            // Update volume icon
+            if (this.value == 0) {
+                volumeBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+            } else if (this.value < 50) {
+                volumeBtn.innerHTML = '<i class="fas fa-volume-down"></i>';
+            } else {
+                volumeBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+            }
+        }
+
+        // Toggle mute
+        function toggleMute() {
+            if (audioPlayer.volume > 0) {
+                audioPlayer.volume = 0;
+                volumeSlider.value = 0;
+                volumeBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+            } else {
+                audioPlayer.volume = 0.8;
+                volumeSlider.value = 80;
+                volumeBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+            }
+        }
+
+        // Toggle favorite for current song
+        function toggleFavorite() {
+            if (!currentSong) return;
+            
+            const songId = currentSong.id;
+            toggleFavoriteSong(songId);
+            
+            // Update button state
+            const isFav = favorites.some(fav => fav.id === songId);
+            favoriteBtn.innerHTML = isFav ? '<i class="fas fa-heart"></i>' : '<i class="far fa-heart"></i>';
+            
+            // Update UI if on favorites page
+            if (currentPage === 'favorites') {
+                renderFavorites();
+            }
+        }
+
+        // Toggle favorite for a song by ID
+        function toggleFavoriteSong(songId) {
+            const songIndex = favorites.findIndex(fav => fav.id === songId);
+            
+            if (songIndex === -1) {
+                // Find the song in playlists and add to favorites
+                for (const playlist of playlists) {
+                    const song = playlist.songs.find(s => s.id === songId);
+                    if (song) {
+                        favorites.push(song);
+                        break;
+                    }
+                }
+            } else {
+                // Remove from favorites
+                favorites.splice(songIndex, 1);
+            }
+            
+            // Save to localStorage
+            localStorage.setItem('favorites', JSON.stringify(favorites));
+            
+            // Update UI
+            updateFavoriteButtons();
+            
+            // Update favorites page if active
+            if (currentPage === 'favorites') {
+                renderFavorites();
+            }
+        }
+
+        // Update favorite buttons throughout the app
+        function updateFavoriteButtons() {
+            document.querySelectorAll('.action-btn.favorite').forEach(btn => {
+                const songId = parseInt(btn.getAttribute('data-song-id'));
+                const isFav = favorites.some(fav => fav.id === songId);
+                
+                btn.classList.toggle('active', isFav);
+                btn.innerHTML = `<i class="${isFav ? 'fas' : 'far'} fa-heart"></i>`;
+            });
+        }
+
+        // Render favorites page
+        function renderFavorites() {
+            favoritesContainer.innerHTML = '';
+            
+            if (favorites.length === 0) {
+                favoritesContainer.innerHTML = '<p>No favorite songs yet. Start adding some!</p>';
+                return;
+            }
+            
+            favorites.forEach(song => {
+                const favoriteItem = document.createElement('div');
+                favoriteItem.className = 'favorite-item';
+                
+                // Find which playlist this song belongs to
+                let playlistIndex = -1;
+                let songIndex = -1;
+                
+                for (let i = 0; i < playlists.length; i++) {
+                    const index = playlists[i].songs.findIndex(s => s.id === song.id);
+                    if (index !== -1) {
+                        playlistIndex = i;
+                        songIndex = index;
+                        break;
+                    }
+                }
+                
+                favoriteItem.innerHTML = `
+                    <div class="song-info">
+                        <div class="song-title">${song.title}</div>
+                        <div class="song-artist">${song.artist}</div>
+                    </div>
+                    <div class="song-actions">
+                        <button class="action-btn play-song" data-playlist-index="${playlistIndex}" data-song-index="${songIndex}">
+                            <i class="fas fa-play"></i>
+                        </button>
+                        <button class="action-btn favorite active" data-song-id="${song.id}">
+                            <i class="fas fa-heart"></i>
+                        </button>
+                    </div>
+                `;
+                
+                favoritesContainer.appendChild(favoriteItem);
+            });
+            
+            // Add event listeners to favorite items
+            document.querySelectorAll('.favorite-item .play-song').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const playlistIndex = parseInt(e.currentTarget.getAttribute('data-playlist-index'));
+                    const songIndex = parseInt(e.currentTarget.getAttribute('data-song-index'));
+                    playSong(playlistIndex, songIndex);
+                });
+            });
+            
+            document.querySelectorAll('.favorite-item .favorite').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const songId = parseInt(e.currentTarget.getAttribute('data-song-id'));
+                    toggleFavoriteSong(songId);
+                });
+            });
+        }
+
+        // Initialize the app
+        init();
+    </script>
+</body>
+</html>
